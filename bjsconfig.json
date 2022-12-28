@@ -1,0 +1,14 @@
+{
+    // The suffix of the coding language.
+    "Suffix": "&",
+
+    // How many loop is there going to be maximum. If you have more than 10 000 loops change it for a higher amount.
+    "MaxLoops": 10000,
+    // This is the type of variable you want to use in the loops.
+    "VariableTypeLoop": "var",
+    // This is that variable that will be used in every loop that you make.
+    "VariableLoop": "i",
+
+    // The folder where you will code all your BubbleJS.
+    "ScriptsDirectory": "/Scripts"
+}
