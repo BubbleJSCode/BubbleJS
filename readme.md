@@ -7,4 +7,4 @@
 
 ## About BubbleJS
 
-> BubbleJS was created by Sparky2you a young guy that is extremely advanced in informatics development. 🚀
+> BubbleJS was created by Sparky2you guy that is extremely advanced in informatics development. 🚀
