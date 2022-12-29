@@ -12,4 +12,4 @@
 ## Download
 
 > BubbleJS is currently only available on Windows.
-> To download BubbleJS click on code and after click on Zip Download
+> To download BubbleJS click on code and after click on Download ZIP.
