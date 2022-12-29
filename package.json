@@ -1,0 +1,19 @@
+{
+  "name": "bubblejs",
+  "version": "0.0.1",
+  "description": "BubbleJS",
+  "main": "index.js",
+  "scripts": {
+    "start": "./run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BubbleJSCode/BubbleJS.git"
+  },
+  "author": "Sparky2you",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BubbleJSCode/BubbleJS/issues"
+  },
+  "homepage": "https://github.com/BubbleJSCode/BubbleJS#readme"
+}
