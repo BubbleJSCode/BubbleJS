@@ -12,6 +12,9 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
     // If config file is empty
     if (json === '') {
         console.log(bubbleError + 'Please reinstall BubbleJs. bjsconfig.json is empty.\n');
+        if (mC.ForceRun === false) {
+            process.exit(1);
+        }
     }
 
     // Removing the comments
@@ -21,10 +24,20 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
     var json = json.replace('// This is that variable that will be used in every loop that you make.', none);
     var json = json.replace('// The folder where you will code all your BubbleJS.', none);
     var json = json.replace('// If you want to use the language or just the generator.', none);
-    var json = json.replace('// You can run the generator without creating a javascript file.', none);
+    var json = json.replace('// You can run the generator without creating a Javascript file.', none);
+    var json = json.replace('// The folder where every Javascript file is generated.', none);
+    var json = json.replace('// Should it be an error if there is nothing in a BubbleJS file.', none);
+    var json = json.replace('// Force the code to run even if there is an error.', none);
+    var json = json.replace('// If you can use the loops.', none);
+    var json = json.replace('// If you can use imports.', none);
+    var json = json.replace("// Unlocks the fast coding for BubbleJS developers (Please do not use if you don't know what it is.).", none);
+    var json = json.replace("// The prefix of the coding language.", none);
 
     // Parsing the JSON
     var mC = JSON.parse(json);
+
+    // Fast variables 2
+    var pr = mC.Prefix;
     
     // Reading the directory
     fs.readdir(__dirname + mC.ScriptsDirectory, 'utf8', function(err, dir) {
@@ -48,23 +61,35 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                 var data2 = data;
 
                 if (mC.UseBubbleJS === true) {
+
+                    // Fast devlopement
+                    if (mC.BubbleJSDeveloper === true) {
+                        if (data2.includes('get #fast;')) {
+                            var data2 = data2.replace('get #fast;', '');
+                            var data2 = data2.replaceAll('data2', 'var data2 = data2');
+                            var data2 = data2.replaceAll('changeAll', 'var data2 = data2.replaceAll');
+                            var data2 = data2.replaceAll('change', 'var data2 = data2.replace');
+                        }
+                    }
+
                     // Function
-                    var data2 = data2.replaceAll('.func', 'function');
-                    var data2 = data2.replaceAll('.def', 'function');
+                    var data2 = data2.replaceAll(pr + 'func', 'function');
+                    var data2 = data2.replaceAll(pr + 'def', 'function');
     
                     // Console.log
                     var data2 = data2.replaceAll('sys.println', 'console.log');
                     var data2 = data2.replaceAll('sys.print', 'console.log');
-                    var data2 = data2.replaceAll('sys.echo', 'console.log');
                     var data2 = data2.replaceAll('console.println', 'console.log');
                     var data2 = data2.replaceAll('console.print', 'console.log');
-                    var data2 = data2.replaceAll('console.echo', 'console.log');
     
                     // Variables
                     var data2 = data2.replaceAll('v' + p, 'var');
                     var data2 = data2.replaceAll('c' + p, 'const');
                     var data2 = data2.replaceAll('l' + p, 'let');
-                    var data2 = data2.replaceAll('set' + p, 'var');
+                    for (var i = 0; i < mC.MaxLoops; i++) {
+                        var data5 = data2.substring(data2.indexOf('set') + 3, data2.indexOf('='));
+                        var data2 = data2.replace('set' + data5 + '=', 'var' + data5 + '=');
+                    }
 
                     // Json
                     var data2 = data2.replaceAll('json.p', 'JSON.parse');
@@ -129,32 +154,33 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                     var data2 = data2.replaceAll(/^.*##.*$/mg, "");
     
                     // Loops
-                    for (var i = 0; i < mC.MaxLoops; i++) {
-                        var loopString = data2.substring(data2.indexOf('loop <') + 6, data2.indexOf('>'));
-                        var data2 = data2.replace('loop <' + loopString + '>', 'for (' + mC.VariableTypeLoop + ' ' + mC.VariableLoop + ' = 0; ' + mC.VariableLoop + ' < ' + loopString + '; ' + mC.VariableLoop + '++)');
+                    if (mC.Loops === true) {
+                        for (var i = 0; i < mC.MaxLoops; i++) {
+                            var loopString = data2.substring(data2.indexOf('loop <') + 6, data2.indexOf('>'));
+                            var data2 = data2.replace('loop <' + loopString + '>', 'for (' + mC.VariableTypeLoop + ' ' + mC.VariableLoop + ' = 0; ' + mC.VariableLoop + ' < ' + loopString + '; ' + mC.VariableLoop + '++)');
+                        }
+                        var data2 = data2.replaceAll('infiniteloop' + p, 'for (' + mC.VariableTypeLoop + ' ' + mC.VariableLoop + ' = 0; ' + mC.VariableLoop + ' < Infinity; ' + mC.VariableLoop + '++)');
                     }
-                    var data2 = data2.replaceAll('infiniteloop' + p, 'for (' + mC.VariableTypeLoop + ' ' + mC.VariableLoop + ' = 0; ' + mC.VariableLoop + ' < Infinity; ' + mC.VariableLoop + '++)');
     
                     // Importings
-                    for (var i = 0; i < mC.MaxLoops; i++) {
-                        var importString = data2.substring(data2.indexOf('import ') + 7, data2.indexOf(';'));
-                        var data2 = data2.replace('import ' + importString + ';', 'var ' + importString + ' = require("' + importString + '")');
+                    if (mC.Imports === true) {
+                        for (var i = 0; i < mC.MaxLoops; i++) {
+                            var importString = data2.substring(data2.indexOf('import ') + 7, data2.indexOf(';'));
+                            var data2 = data2.replace('import ' + importString + ';', 'var ' + importString + ' = require("' + importString + '")');
+                        }
                     }
 
                     // Javascript shortcuts
-                    // Includes
-                    if (data.includes('get documents;')) {
-                        // Removing the include doucments;
-                        var data2 = data2.replace('get documents;', '');
+                    // Removing the include doucments;
+                    var data2 = data2.replace('get documents;', '');
 
-                        // Getting
-                        var data2 = data2.replaceAll('gebi(', 'getElementById(');
-                        var data2 = data2.replaceAll('gebtn(', 'getElementsByTagName(');
-                        var data2 = data2.replaceAll('gebcn(', 'getElementsByClassName(');
-                        
-                        // Document
-                        var data2 = data2.replaceAll('doc.', 'document.');
-                    }
+                    // Getting
+                    var data2 = data2.replaceAll('gebi(', 'getElementById(');
+                    var data2 = data2.replaceAll('gebtn(', 'getElementsByTagName(');
+                    var data2 = data2.replaceAll('gebcn(', 'getElementsByClassName(');
+                    
+                    // Document
+                    var data2 = data2.replaceAll('doc.', 'document.');
     
                 } else {
 
@@ -178,7 +204,10 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
 
                 // Checking if it's only .bjs files if is not sending error
                 if (!files.includes('.bjs')) {
-                   console.log(bubbleError + 'Please use only .bjs files in your scripts.\n');
+                    console.log(bubbleError + 'Please use only .bjs files in your scripts.\nIf you want to create a file, create it in the BubbleJS folder.');
+                    if (mC.ForceRun === false) {
+                        process.exit(1);
+                    }
                 }
 
                 // If is only .bjs files
@@ -186,17 +215,23 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
 
                     // Replacing the .asc for .js
                     var file = files.split('.')[0] + '.js';
+
+                    if (mC.EmptyFile === true) {
+                        if (data2 === '') {
+                            console.log(bubbleError + 'One or more than one file is containing nothing. Please insert something in them.');
+                        }
+                    }
     
                     // Generating the Javascript
                     // Checking the options
                     if (mC.GenerationFile === true) {
                         // Creating the directory
-                        fs.mkdir(__dirname + '/Generation/', function(err) {
+                        fs.mkdir(__dirname + mC.GenerationFolder, function(err) {
                         });
                         // Adding the files
-                        fs.writeFile(__dirname + '/Generation/' + file, data2, function(err) {
+                        fs.writeFile(__dirname + mC.GenerationFolder + file, data2, function(err) {
                             // Run the code
-                            var runnableScript = exec('node ./Generation/' + file,
+                            var runnableScript = exec('node .' + mC.GenerationFolder + file,
                             (error, stdout, stderr) => {
                                 console.log(stdout);
                             });
@@ -204,7 +239,8 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                         // Checking the options
                     } else if (mC.GenerationFile === false) {
                         // Checking if directory exists
-                        if (fs.existsSync(__dirname + "/Generation/")) {
+                        var existCheck = fs.existsSync(__dirname + mC.GenerationFolder);
+                        if (existCheck) {
                             var checkDir = true;
                         } else {
                             var checkDir = false;
@@ -212,9 +248,9 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                         // Checking if the variable is true
                         if (checkDir === true) {
                             // Removing the files from the directory
-                            fs.unlink(__dirname + "/Generation/" + file, function(err) {
+                            fs.unlink(__dirname + mC.GenerationFolder + file, function(err) {
                                 // Removing the directory
-                                fs.rmdir(__dirname + "/Generation/", (err) => {
+                                fs.rmdir(__dirname + mC.GenerationFolder, (err) => {
             
                                     if (err) {
                                         return console.log("error occurred in deleting directory", err);
