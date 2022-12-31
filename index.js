@@ -5,6 +5,7 @@ var exec  = require('child_process').exec;
 // Fast variables
 var none = '';
 var bubbleError = '\nBubbleJS error: ';
+var bubbleUrgent = '\nBubbleJS <!>: ';
 
 // Reading the JSON file
 fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
@@ -32,6 +33,16 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
     var json = json.replace('// If you can use imports.', none);
     var json = json.replace("// Unlocks the fast coding for BubbleJS developers (Please do not use if you don't know what it is.).", none);
     var json = json.replace("// The prefix of the coding language.", none);
+    var json = json.replace("// If you would need to 'Press any key to exit' so you can see the code you have made.", none);
+    var json = json.replace("// This will create a folder and a index.html file with containing already everything to start to code (still need a bit of html code). Please set the option GenerationFile to true.", none);
+    var json = json.replace("/* Prefix and suffix */", none);
+    var json = json.replace("/* Imports */", none);
+    var json = json.replace("/* BubbleJS Developers */", none);
+    var json = json.replace("/* Others */", none);
+    var json = json.replace("/* Loops */", none);
+    var json = json.replace("/* Directory */", none);
+    var json = json.replace("/* Files */", none);
+    var json = json.replace("/* Website */", none);
 
     // Parsing the JSON
     var mC = JSON.parse(json);
@@ -62,6 +73,44 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
 
                 if (mC.UseBubbleJS === true) {
 
+                    if (mC.WebsiteDevelopement === true) {
+                        fs.mkdir(__dirname + '/Website/', function(err) {
+                            var htmlData = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<!-- Please set the "FileName.js" to your Javascript file. -->
+<script src="/Generation/FileName.js"></script>
+</html>
+                            `;
+
+                            // checking and creating the index.html file and Website folder
+                            if (fs.existsSync(__dirname + '/Website/index.html')) {
+                                fs.readFile(__dirname + '/Website/index.html', 'utf8', function(err, htmlFile) {
+                                    if (htmlFile === htmlData) {
+                                        fs.writeFile(__dirname + '/Website/index.html', htmlData, function(err) {
+                                        });
+                                    }
+                                });
+                            } else if (!fs.existsSync(__dirname + '/Website/index.html')) {
+                                fs.writeFile(__dirname + '/Website/index.html', htmlData, function(err) {
+                                });
+                            }
+                        });
+                    } else if (mC.WebsiteDevelopement === false) {
+                        if (fs.existsSync(__dirname + '/Website/')) {
+                            console.log(bubbleUrgent + "Please consider removing the website folder and the files by your self for your code's security.");
+                        }
+                    }
+
                     // Fast devlopement
                     if (mC.BubbleJSDeveloper === true) {
                         if (data2.includes('get #fast;')) {
@@ -79,6 +128,7 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                     // Console.log
                     var data2 = data2.replaceAll('sys.println', 'console.log');
                     var data2 = data2.replaceAll('sys.print', 'console.log');
+                    var data2 = data2.replaceAll('sys.say', 'console.log');
                     var data2 = data2.replaceAll('console.println', 'console.log');
                     var data2 = data2.replaceAll('console.print', 'console.log');
     
@@ -86,14 +136,21 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                     var data2 = data2.replaceAll('v' + p, 'var');
                     var data2 = data2.replaceAll('c' + p, 'const');
                     var data2 = data2.replaceAll('l' + p, 'let');
-                    for (var i = 0; i < mC.MaxLoops; i++) {
-                        var data5 = data2.substring(data2.indexOf('set') + 3, data2.indexOf('='));
-                        var data2 = data2.replace('set' + data5 + '=', 'var' + data5 + '=');
-                    }
+                    var data2 = data2.replaceAll('set' + p, 'var');
+                    var data2 = data2.replaceAll('sys.set', 'var');
+                    var data2 = data2.replaceAll('sys.var', 'var');
+                    var data2 = data2.replaceAll('sys.const', 'const');
+                    var data2 = data2.replaceAll('sys.let', 'let');
 
                     // Json
                     var data2 = data2.replaceAll('json.p', 'JSON.parse');
                     var data2 = data2.replaceAll('json.s', 'JSON.stringify');
+
+                    // ?=
+                    for (var i = 0; i < mC.MaxLoops; i++) {
+                        var data6 = data2.substring(data2.indexOf('sys.?') + 5, data2.indexOf('?;'));
+                        var data2 = data2.replace('sys.?' + data6 + '?;', 'console.log(' + data6 + ');');
+                    }
 
                     // Json file getting
                     /*
@@ -136,6 +193,100 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                     }
                     */
 
+                    if (data2.includes('get pack.math;')) {
+                        var data2 = 'get pack.math;\nget pack.math;\nget pack.math;\nget pack.math;\nget pack.math;' + data2;
+                        var data2 = data2.replace('get pack.math;', `
+function square(number) {
+    return number * number
+}
+`);
+                        var data2 = data2.replace('get pack.math;', `
+function log(string) {
+    console.log(string)
+}
+`);
+                        var data2 = data2.replace('get pack.math;', `
+function multiply(number, number2) {
+    return number * number2
+}
+`);
+                        var data2 = data2.replace('get pack.math;', `
+function division(number, number2) {
+    return number / number2
+}\n
+function divide(number, number2) {
+    return number / number2
+}
+`);
+                        var data2 = data2.replace('get pack.math;', `
+function addition(number, number2) {
+    return number + number2
+}
+`);
+                        var data2 = data2.replace('get pack.math;', `
+function subtraction(number, number2) {
+    return number - number2
+}
+`);
+                    }
+
+                    // get square
+                    if (data2.includes('get square;')) {
+                        var data2 = data2.replace('get square;', `
+function square(number) {
+    return number * number
+}
+`);
+                    }
+                    
+                    // get log
+                    if (data2.includes('get log;')) {
+                        var data2 = data2.replace('get log;', `
+function log(string) {
+    console.log(string)
+}
+`);
+                    }
+
+                    // get multiply
+                    if (data2.includes('get multiply;')) {
+                        var data2 = data2.replace('get multiply;', `
+function multiply(number, number2) {
+    return number * number2
+}
+`);
+                    }
+
+                    // get multiply
+                    if (data2.includes('get division;')) {
+                        var data2 = data2.replace('get division;', `
+function division(number, number2) {
+    return number / number2
+}\n
+function divide(number, number2) {
+    return number / number2
+}
+`);
+                    }
+
+                    // get addition
+                    if (data2.includes('get addition;')) {
+                        var data2 = data2.replace('get addition;', `
+function addition(number, number2) {
+    return number + number2
+}
+`);
+                    }
+
+                    // get subtraction
+                    if (data2.includes('get subtraction;')) {
+                        var data2 = data2.replace('get subtraction;', `
+function subtraction(number, number2) {
+    return number - number2
+}
+`);
+                    }
+
                     // Eval
                     var data2 = data2.replaceAll('sys.exe(', 'eval(');
                     var data2 = data2.replaceAll('sys.eval(', 'eval(');
@@ -170,14 +321,13 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                         }
                     }
 
-                    // Javascript shortcuts
-                    // Removing the include doucments;
-                    var data2 = data2.replace('get documents;', '');
-
                     // Getting
                     var data2 = data2.replaceAll('gebi(', 'getElementById(');
                     var data2 = data2.replaceAll('gebtn(', 'getElementsByTagName(');
                     var data2 = data2.replaceAll('gebcn(', 'getElementsByClassName(');
+                    var data2 = data2.replaceAll('getbyid(', 'getElementById(');
+                    var data2 = data2.replaceAll('getbytagname(', 'getElementsByTagName(');
+                    var data2 = data2.replaceAll('getbyclassname(', 'getElementsByClassName(');
                     
                     // Document
                     var data2 = data2.replaceAll('doc.', 'document.');
@@ -234,6 +384,14 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
                             var runnableScript = exec('node .' + mC.GenerationFolder + file,
                             (error, stdout, stderr) => {
                                 console.log(stdout);
+
+                                if (mC.WaitKeyPress === true) {
+                                    // Press any key to exit
+                                    console.log('Press any key to exit');
+                                    process.stdin.setRawMode(true);
+                                    process.stdin.resume();
+                                    process.stdin.on('data', process.exit.bind(process, 0));
+                                }
                             });
                         });
                         // Checking the options
@@ -261,6 +419,14 @@ fs.readFile('bjsconfig.json', 'utf8', function(err, json) {
     
                         // Executing the code without files
                         eval(data2);
+
+                        if (mC.WaitKeyPress === true) {
+                            // Press any key to exit
+                            console.log('Press any key to exit');
+                            process.stdin.setRawMode(true);
+                            process.stdin.resume();
+                            process.stdin.on('data', process.exit.bind(process, 0));
+                        }
                     }
                 }
             });
