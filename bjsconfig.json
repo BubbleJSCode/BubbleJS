@@ -1,41 +1,33 @@
 {
-    "Suffix": "&", // The suffix of the coding language.
+    /* Prefix and suffix */
+    "Suffix": "&",                       // The suffix of the coding language.
+    "Prefix": ".",                       // The prefix of the coding language.
 
+    /* Imports */
+    "Imports": true,                     // If you can use imports.
 
-    "Prefix": ".", // The prefix of the coding language.
+    /* BubbleJS Developers */
+    "BubbleJSDeveloper": false,          // Unlocks the fast coding for BubbleJS developers (Please do not use if you don't know what it is.).
 
+    /* Loops */
+    "Loops": true,                       // If you can use the loops.
+    "MaxLoops": 10000,                   // How many loop is there going to be maximum. If you have more than 10 000 loops change it for a higher amount.
+    "VariableTypeLoop": "var",           // This is the type of variable you want to use in the loops.
+    "VariableLoop": "i",                 // This is that variable that will be used in every loop that you make.
 
-    "Imports": true, // If you can use imports.
+    /* Directory */
+    "ScriptsDirectory": "/Scripts",      // The folder where you will code all your BubbleJS.
+    "GenerationFolder": "/Generation/",  // The folder where every Javascript file is generated.
 
+    /* Files */
+    "GenerationFile": false,             // You can run the generator without creating a Javascript file.
+    "EmptyFile": true,                   // Should it be an error if there is nothing in a BubbleJS file.
 
-    "BubbleJSDeveloper": false, // Unlocks the fast coding for BubbleJS developers (Please do not use if you don't know what it is.).
-
-
-    "Loops": true, // If you can use the loops.
-
-    "MaxLoops": 10000, // How many loop is there going to be maximum. If you have more than 10 000 loops change it for a higher amount.
-
-    "VariableTypeLoop": "var", // This is the type of variable you want to use in the loops.
-
-    "VariableLoop": "i", // This is that variable that will be used in every loop that you make.
-
-
-    "ScriptsDirectory": "/Scripts", // The folder where you will code all your BubbleJS.
+    /* Website */
+    "WebsiteDevelopement": false,         // This will create a folder and a index.html file with containing already everything to start to code (still need a bit of html code). Please set the option GenerationFile to true.
     
-
-    "GenerationFolder": "/Generation/", // The folder where every Javascript file is generated.
-
-
-    "GenerationFile": false, // You can run the generator without creating a Javascript file.
-
-
-
-    "EmptyFile": true, // Should it be an error if there is nothing in a BubbleJS file.
-
-
-    "ForceRun": false, // Force the code to run even if there is an error.
-
-    
-    "UseBubbleJS": true // If you want to use the language or just the generator.
-
+    /* Others */
+    "UseBubbleJS": true,                 // If you want to use the language or just the generator.
+    "ForceRun": false,                   // Force the code to run even if there is an error.
+    "WaitKeyPress": true                 // If you would need to 'Press any key to exit' so you can see the code you have made.
 }
